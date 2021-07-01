@@ -1,0 +1,102 @@
+anchors = [2g, 3g, 4g, 5g, 6g]
+selector = 7g
+circle = [22g, 23g, 24g, 25g, 26g]
+colors = [[255, 89, 89], [255, 206, 89], [89, 255, 95], [89, 190, 255], [214, 89, 255], [255, 89, 194]]
+
+gs = import gamescene
+
+cir1 = counter(0)
+cir2 = counter(0)
+cir3 = counter(0)
+cir4 = counter(0)
+cir5 = counter(0)
+
+color = counter(0)
+selected = counter(0)
+
+gs.button_a().on_triggered(!{
+
+    selected += 1
+
+    if selected == anchors.length {
+        selected -= anchors.length
+        wait()
+    }
+
+    current_anchor = anchors[
+        selected.to_const(0..anchors.length)
+    ]
+
+    selector.move_to(current_anchor)
+
+    if selected == 0 {
+        color = cir1
+    }else if selected == 1 {
+        color = cir2
+    }else if selected == 2 {
+        color = cir3
+    }else if selected == 3 {
+        color = cir4
+    }else if selected == 4 {
+        color = cir5
+    }
+})
+
+gs.button_b().on_triggered(!{
+
+    if selected == 0 {
+        cir1 += 1
+    }else if selected == 1 {
+        cir2 += 1
+    }else if selected == 2 {
+        cir3 += 1
+    }else if selected == 3 {
+        cir4 += 1
+    }else if selected == 4 {
+        cir5 += 1
+    }
+
+    if cir1 == 5 {
+        cir1 = 0
+    }
+    if cir2 == 5 {
+        cir2 = 0
+    }
+    if cir3 == 5 {
+        cir3 = 0
+    }
+    if cir4 == 5 {
+        cir4 = 0
+    }
+    if cir5 == 5 {
+        cir5 = 0
+    }
+
+    color += 1
+
+    if color == colors.length {
+        color -= colors.length
+        wait()
+    }
+
+    current_select = circle[
+        selected.to_const(0..anchors.length)
+    ]
+
+    current_color = colors[
+        color.to_const(0..colors.length)
+    ]
+
+    current_select.pulse(current_color[0], current_color[1], current_color[2], hold = 9999)
+
+})
+
+let check = !{
+    if cir1 == 1 && cir2 == 2 && cir3 == 4 && cir4 == 3 && cir5 == 2 {
+    79g.alpha(1, 0)
+    876g.toggle_off()
+}else{
+    79g.alpha(0, 0)
+}}
+
+on(touch(), check)
